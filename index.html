@@ -4,60 +4,71 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Primary Meta Tags -->
   <meta name="title" content="Rectifying the Emotional Flow: Aligning Priors and Dynamic Guidance for High-Arousal Text-to-Speech - Anonymous Authors" />
-  <meta name="description" content="Project page for the paper: Rectifying the Emotional Flow: Aligning Priors and Dynamic Guidance for High-Arousal Text-to-Speech (Anonymous Authors)." />
-  <meta name="keywords" content="text-to-speech, emotional TTS, high-arousal, dynamic guidance, diffusion, speech synthesis" />
+  <meta name="description" content="We propose an inference framework for high-arousal emotional TTS that rectifies initialization and guidance to improve stability and expressiveness without retraining." />
+  <meta name="keywords" content="text-to-speech, emotional TTS, high-arousal, diffusion, flow matching, guidance, classifier-free guidance" />
   <meta name="author" content="Anonymous Authors" />
   <meta name="robots" content="index, follow" />
   <meta name="language" content="English" />
 
-  <!-- Open Graph -->
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="Anonymous" />
   <meta property="og:title" content="Rectifying the Emotional Flow: Aligning Priors and Dynamic Guidance for High-Arousal Text-to-Speech" />
-  <meta property="og:description" content="Project page for the paper: Rectifying the Emotional Flow: Aligning Priors and Dynamic Guidance for High-Arousal Text-to-Speech (Anonymous Authors)." />
+  <meta property="og:description" content="We propose an inference framework for high-arousal emotional TTS that rectifies initialization and guidance to improve stability and expressiveness without retraining." />
   <meta property="og:url" content="https://YOUR_DOMAIN.com/YOUR_PROJECT_PAGE" />
   <meta property="og:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Rectifying the Emotional Flow - Research Preview" />
 
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:site" content="@YOUR_TWITTER_HANDLE" />
-  <meta name="twitter:creator" content="@YOUR_TWITTER_HANDLE" />
   <meta name="twitter:title" content="Rectifying the Emotional Flow: Aligning Priors and Dynamic Guidance for High-Arousal Text-to-Speech" />
-  <meta name="twitter:description" content="Project page for the paper: Rectifying the Emotional Flow: Aligning Priors and Dynamic Guidance for High-Arousal Text-to-Speech (Anonymous Authors)." />
+  <meta name="twitter:description" content="We propose an inference framework for high-arousal emotional TTS that rectifies initialization and guidance to improve stability and expressiveness without retraining." />
   <meta name="twitter:image" content="https://YOUR_DOMAIN.com/static/images/social_preview.png" />
-  <meta name="twitter:image:alt" content="Rectifying the Emotional Flow - Research Preview" />
-
-  <!-- Academic/Research Specific -->
-  <meta name="citation_title" content="Rectifying the Emotional Flow: Aligning Priors and Dynamic Guidance for High-Arousal Text-to-Speech" />
-  <meta name="citation_author" content="Anonymous, Authors" />
-  <meta name="citation_publication_date" content="2024" />
-  <meta name="citation_conference_title" content="CONFERENCE_NAME" />
-  <meta name="citation_pdf_url" content="https://YOUR_DOMAIN.com/static/pdfs/paper.pdf" />
 
   <title>Rectifying the Emotional Flow: Aligning Priors and Dynamic Guidance for High-Arousal Text-to-Speech | Anonymous Authors</title>
 
-  <!-- Optional styling (keep if you want a decent look) -->
+  <!-- Keep Bulma for simple styling -->
   <link rel="stylesheet" href="static/css/bulma.min.css" />
   <style>
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+    .paper-figure img { width: 100%; height: auto; border-radius: 12px; }
+    .paper-figure figcaption { margin-top: 0.75rem; color: #4a4a4a; }
+    .title-wrap { word-break: break-word; }
   </style>
 </head>
 
 <body>
-  <!-- Minimal content only: title + anonymous authors -->
   <main class="section">
     <div class="container is-max-desktop">
+      <!-- Title / Authors -->
       <div class="content has-text-centered">
-        <h1 class="title is-2">
+        <h1 class="title is-2 title-wrap">
           Rectifying the Emotional Flow: Aligning Priors and Dynamic Guidance for High-Arousal Text-to-Speech
         </h1>
         <p class="subtitle is-5">Anonymous Authors</p>
       </div>
+
+      <!-- Figure -->
+      <section class="section pt-4">
+        <figure class="paper-figure">
+          <!-- Put your image at: static/images/overview.png -->
+          <img src="static/images/overview.png"
+               alt="Method overview: Emotion-Rectified Noise Prior and Likelihood-Inverse Guidance"
+               loading="lazy" />
+          <figcaption class="has-text-centered is-size-6">
+            Overview of the proposed inference framework: Emotion-Rectified Noise Prior (ERNP) and Likelihood-Inverse Guidance (LIG).
+          </figcaption>
+        </figure>
+      </section>
+
+      <!-- Abstract -->
+      <section class="section pt-0">
+        <div class="content">
+          <h2 class="title is-4">Abstract</h2>
+          <p>
+            While diffusion and flow-matching models have advanced TTS, generating high-arousal emotions remains a persistent challenge due to the trade-off between stability and expressiveness. Existing systems often suffer from linguistic collapse when pursuing high intensity or fail to meet target emotional levels under stable settings. In this work, we identify that standard Gaussian initialization inevitably introduces a neutral prosody bias, while uniform Classifier-Free Guidance often distorts the acoustic manifold, leading to artifacts.
+            To address this, we propose an inference framework that rectifies the emotional trajectory. An Emotion-Rectified Noise Prior injects a semantic gradient at initialization to align sampling with the target emotional manifold, and Likelihood-Inverse Guidance adaptively schedules guidance via a conditional/unconditional likelihood ratio, strengthening guidance only when the trajectory drifts toward a neutral fallback. Extensive experiments demonstrate that our method effectively resolves the stability bottleneck in high-intensity scenarios, achieving superior linguistic accuracy and emotional fidelity without model retraining.
+          </p>
+        </div>
+      </section>
     </div>
   </main>
 </body>
