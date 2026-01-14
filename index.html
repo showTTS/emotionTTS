@@ -34,14 +34,16 @@
 
     .hint { color: #4a4a4a; }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+
     .demo-card { border-radius: 14px; overflow: hidden; }
     .demo-card .card-content { padding: 1.1rem; }
     .demo-id { font-weight: 800; letter-spacing: 0.2px; }
     .pill { border-radius: 999px; padding: 0.15rem 0.55rem; font-size: 0.85rem; display: inline-block; border: 1px solid #e5e5e5; background: #f7f7f7; }
     .pill-emo { background: #eef3ff; border-color: #d7e3ff; }
-    .pill-model { background: #f6f6f6; }
-    .pill-ours { background: #e7f7ef; border-color: #b7ebcf; }
     .pill-base { background: #fff3cd; border-color: #ffe69c; }
+    .pill-ours { background: #e7f7ef; border-color: #b7ebcf; }
+    .pill-gt { background: #f0f9ff; border-color: #bae6fd; }
+
     audio { width: 100%; }
     .prompt { font-size: 1.05rem; }
     .note { margin-top: 0.35rem; font-size: 0.95rem; color: #4a4a4a; }
@@ -97,8 +99,8 @@
         <div class="content">
           <h2 class="title is-4">Audio Demos</h2>
           <p class="hint">
-            Audio files are expected under <span class="mono">static/audio/</span> with ASCII-only names.
-            Each row compares a baseline model against our method on the same backbone.
+            Audio files are expected under <span class="mono">static/audio/</span>. Ground truth files are expected under
+            <span class="mono">static/audio/gt/</span>. This page does not display filenames.
           </p>
 
           <div class="tabs is-toggle is-toggle-rounded is-small">
@@ -118,6 +120,12 @@
   </main>
 
   <script>
+    // Assumed naming convention (ASCII-only):
+    // Baseline: static/audio/<uttid>_<model>_baseline.wav
+    // Ours:     static/audio/<uttid>_<model>_ours.wav
+    // GT:       static/audio/gt/<uttid>.wav
+    // model: indextts2 | cosyvoice2
+
     const demos = [
       {
         id: "0011_000439",
@@ -126,6 +134,7 @@
         backbone: "CosyVoice2",
         baselineSrc: "static/audio/0011_000439_cosyvoice2_baseline.wav",
         oursSrc: "static/audio/0011_000439_cosyvoice2_ours.wav",
+        gtSrc: "static/audio/gt/0011_000439.wav",
         note: "Our method better preserves high-arousal anger while keeping articulation clean."
       },
       {
@@ -135,6 +144,7 @@
         backbone: "CosyVoice2",
         baselineSrc: "static/audio/0011_000612_cosyvoice2_baseline.wav",
         oursSrc: "static/audio/0011_000612_cosyvoice2_ours.wav",
+        gtSrc: "static/audio/gt/0011_000612.wav",
         note: "Less neutral drift and more controlled intensity at high arousal."
       },
       {
@@ -144,6 +154,7 @@
         backbone: "IndexTTS2",
         baselineSrc: "static/audio/0011_000629_indextts2_baseline.wav",
         oursSrc: "static/audio/0011_000629_indextts2_ours.wav",
+        gtSrc: "static/audio/gt/0011_000629.wav",
         note: "Fewer audible artifacts under aggressive delivery."
       },
       {
@@ -153,6 +164,7 @@
         backbone: "CosyVoice2",
         baselineSrc: "static/audio/0011_000691_cosyvoice2_baseline.wav",
         oursSrc: "static/audio/0011_000691_cosyvoice2_ours.wav",
+        gtSrc: "static/audio/gt/0011_000691.wav",
         note: "Stronger affect with improved stability and fewer distortions."
       },
       {
@@ -162,6 +174,7 @@
         backbone: "CosyVoice2",
         baselineSrc: "static/audio/0011_001068_cosyvoice2_baseline.wav",
         oursSrc: "static/audio/0011_001068_cosyvoice2_ours.wav",
+        gtSrc: "static/audio/gt/0011_001068.wav",
         note: "More stable phonation and smoother dynamics in expressive regions."
       },
       {
@@ -171,6 +184,7 @@
         backbone: "IndexTTS2",
         baselineSrc: "static/audio/0011_001199_indextts2_baseline.wav",
         oursSrc: "static/audio/0011_001199_indextts2_ours.wav",
+        gtSrc: "static/audio/gt/0011_001199.wav",
         note: "Fewer broken-phrasing failures and more coherent prosody."
       },
       {
@@ -180,6 +194,7 @@
         backbone: "IndexTTS2",
         baselineSrc: "static/audio/0011_001415_indextts2_baseline.wav",
         oursSrc: "static/audio/0011_001415_indextts2_ours.wav",
+        gtSrc: "static/audio/gt/0011_001415.wav",
         note: "Clearer surprised intent with reduced neutral fallback."
       }
     ];
@@ -204,6 +219,7 @@
                       ${pill(d.emotion, "pill-emo")}
                       ${pill("Baseline: " + d.backbone, "pill-base")}
                       ${pill("Ours (ERNP + LIG)", "pill-ours")}
+                      ${pill("Ground Truth", "pill-gt")}
                     </div>
                   </div>
                 </div>
@@ -213,19 +229,26 @@
               <div class="note">${d.note}</div>
 
               <div class="columns is-variable is-6 mt-3">
-                <div class="column is-6">
+                <div class="column is-4">
                   <p class="mb-2"><b>Baseline</b> (${d.backbone})</p>
                   <audio controls preload="none" aria-label="Baseline audio">
                     <source src="${d.baselineSrc}" type="audio/wav" />
                   </audio>
                 </div>
-                <div class="column is-6">
+                <div class="column is-4">
                   <p class="mb-2"><b>Ours</b> (same backbone)</p>
                   <audio controls preload="none" aria-label="Ours audio">
                     <source src="${d.oursSrc}" type="audio/wav" />
                   </audio>
                 </div>
+                <div class="column is-4">
+                  <p class="mb-2"><b>Ground Truth</b></p>
+                  <audio controls preload="none" aria-label="Ground truth audio">
+                    <source src="${d.gtSrc}" type="audio/wav" />
+                  </audio>
+                </div>
               </div>
+
             </div>
           </div>
         </div>
