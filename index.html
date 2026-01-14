@@ -25,7 +25,6 @@
 
   <title>Rectifying the Emotional Flow: Aligning Priors and Dynamic Guidance for High-Arousal Text-to-Speech | Anonymous Authors</title>
 
-  <!-- Keep Bulma for simple styling -->
   <link rel="stylesheet" href="static/css/bulma.min.css" />
   <style>
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
@@ -33,26 +32,27 @@
     .paper-figure figcaption { margin-top: 0.75rem; color: #4a4a4a; }
     .title-wrap { word-break: break-word; }
 
-    /* Demo styles */
-    .demo-card { border-radius: 14px; }
-    .demo-card .card-content { padding: 1.1rem; }
-    .demo-id { font-weight: 700; }
-    .audio-wrap { width: 100%; }
-    audio { width: 100%; }
     .hint { color: #4a4a4a; }
-    .tight { margin-top: 0.4rem; }
-    .pill { border-radius: 999px; padding: 0.15rem 0.55rem; font-size: 0.85rem; display: inline-block; }
-    .pill-b { background: #f5f5f5; color: #363636; border: 1px solid #e5e5e5; }
-    .pill-warn { background: #fff3cd; color: #664d03; border: 1px solid #ffe69c; }
-    .pill-good { background: #e7f7ef; color: #0f5132; border: 1px solid #b7ebcf; }
     .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+    .demo-card { border-radius: 14px; overflow: hidden; }
+    .demo-card .card-content { padding: 1.1rem; }
+    .demo-id { font-weight: 800; letter-spacing: 0.2px; }
+    .pill { border-radius: 999px; padding: 0.15rem 0.55rem; font-size: 0.85rem; display: inline-block; border: 1px solid #e5e5e5; background: #f7f7f7; }
+    .pill-emo { background: #eef3ff; border-color: #d7e3ff; }
+    .pill-model { background: #f6f6f6; }
+    .pill-ours { background: #e7f7ef; border-color: #b7ebcf; }
+    .pill-base { background: #fff3cd; border-color: #ffe69c; }
+    audio { width: 100%; }
+    .prompt { font-size: 1.05rem; }
+    .note { margin-top: 0.35rem; font-size: 0.95rem; color: #4a4a4a; }
+    .tabs a { user-select: none; }
   </style>
 </head>
 
 <body>
   <main class="section">
     <div class="container is-max-desktop">
-      <!-- Title / Authors -->
+
       <div class="content has-text-centered">
         <h1 class="title is-2 title-wrap">
           Rectifying the Emotional Flow: Aligning Priors and Dynamic Guidance for High-Arousal Text-to-Speech
@@ -60,10 +60,8 @@
         <p class="subtitle is-5">Anonymous Authors</p>
       </div>
 
-      <!-- Figure -->
       <section class="section pt-4">
         <figure class="paper-figure">
-          <!-- Put your image at: static/images/method.png -->
           <img src="static/images/method.png"
                alt="Method overview: Emotion-Rectified Noise Prior and Likelihood-Inverse Guidance"
                loading="lazy" />
@@ -73,322 +71,183 @@
         </figure>
       </section>
 
-      <!-- Abstract -->
       <section class="section pt-0">
         <div class="content">
           <h2 class="title is-4">Abstract</h2>
           <p>
-            While diffusion and flow-matching models have advanced TTS, generating high-arousal emotions remains a persistent challenge due to the trade-off between stability and expressiveness. Existing systems often suffer from linguistic collapse when pursuing high intensity or fail to meet target emotional levels under stable settings. In this work, we identify that standard Gaussian initialization inevitably introduces a neutral prosody bias, while uniform Classifier-Free Guidance often distorts the acoustic manifold, leading to artifacts.
-            To address this, we propose an inference framework that rectifies the emotional trajectory. An Emotion-Rectified Noise Prior injects a semantic gradient at initialization to align sampling with the target emotional manifold, and Likelihood-Inverse Guidance adaptively schedules guidance via a conditional/unconditional likelihood ratio, strengthening guidance only when the trajectory drifts toward a neutral fallback. Extensive experiments demonstrate that our method effectively resolves the stability bottleneck in high-intensity scenarios, achieving superior linguistic accuracy and emotional fidelity without model retraining.
+            While diffusion and flow-matching models have advanced TTS, generating high-arousal emotions remains a persistent challenge due to the trade-off between stability and expressiveness. Existing systems often suffer from linguistic collapse when pursuing high intensity or fail to meet target emotional levels under stable settings. In this work, we identify that standard Gaussian initialization introduces a neutral-prosody bias, while uniform Classifier-Free Guidance can distort the acoustic manifold and lead to artifacts.
+            To address this, we propose an inference framework that rectifies the emotional trajectory. An Emotion-Rectified Noise Prior injects a semantic gradient at initialization to align sampling with the target emotional manifold, and Likelihood-Inverse Guidance adaptively schedules guidance via a conditional/unconditional likelihood ratio, strengthening guidance only when the trajectory drifts toward a neutral fallback. Experiments show improved stability and expressiveness without retraining.
           </p>
         </div>
       </section>
 
-      <!-- Why ours is better -->
       <section class="section pt-0">
         <div class="content">
-          <h2 class="title is-4">Why our method is better</h2>
-          <p class="hint">
-            Across high-arousal cases, our framework improves both <b>expressiveness</b> and <b>stability</b> without retraining:
-          </p>
+          <h2 class="title is-4">Where our method helps</h2>
           <ul>
-            <li>
-              <b>Stronger, more accurate emotion</b>: ERNP aligns the sampling trajectory with the target emotional manifold early, reducing neutral-prosody fallback and improving high-intensity delivery.
-            </li>
-            <li>
-              <b>Fewer linguistic failures (e.g., broken phrasing / “断句”)</b>: LIG increases guidance only when needed, preventing over-guidance that can trigger rhythm collapse or unnatural segment breaks.
-            </li>
-            <li>
-              <b>Cleaner acoustics (fewer artifacts such as “破音”)</b>: adaptive guidance avoids pushing trajectories off the acoustic manifold, improving timbre consistency and reducing harsh distortions.
-            </li>
-            <li>
-              <b>More stable phonation (“发声”更稳)</b>: compared to uniform CFG, LIG stabilizes dynamics in ambiguous regions, improving continuity and reducing sudden energy spikes.
-            </li>
+            <li><b>More accurate high-arousal emotion</b>: ERNP reduces neutral-prosody drift early in sampling.</li>
+            <li><b>Fewer linguistic failures</b>: LIG increases guidance only when needed, avoiding over-guidance that can cause broken phrasing or unnatural pauses.</li>
+            <li><b>Cleaner acoustics</b>: adaptive guidance better respects the acoustic manifold, reducing audible artifacts.</li>
+            <li><b>More stable phonation</b>: improved continuity and fewer sudden energy spikes under intense expressions.</li>
           </ul>
-          <p class="hint tight">
-            Below we provide paired demos (<span class="pill pill-b">Baseline</span> vs <span class="pill pill-good">Ours</span>) for quick A/B listening.
-          </p>
         </div>
       </section>
 
-      <!-- Audio Demos -->
       <section class="section pt-0">
         <div class="content">
           <h2 class="title is-4">Audio Demos</h2>
           <p class="hint">
-            Put all wav files under <span class="mono">static/audio/</span> (or edit paths below).
+            Audio files are expected under <span class="mono">static/audio/</span> with ASCII-only names.
+            Each row compares a baseline model against our method on the same backbone.
           </p>
+
+          <div class="tabs is-toggle is-toggle-rounded is-small">
+            <ul>
+              <li class="is-active"><a data-filter="all">All</a></li>
+              <li><a data-filter="Angry">Angry</a></li>
+              <li><a data-filter="Sad">Sad</a></li>
+              <li><a data-filter="Surprise">Surprise</a></li>
+            </ul>
+          </div>
         </div>
 
-        <!-- Demo list -->
-        <div class="columns is-multiline">
-
-          <!-- 0011_001415 -->
-          <div class="column is-12">
-            <div class="card demo-card">
-              <div class="card-content">
-                <div class="level is-mobile">
-                  <div class="level-left">
-                    <div>
-                      <div class="demo-id">0011_001415</div>
-                      <div class="hint">
-                        <span class="pill pill-b">Baseline</span>
-                        <span class="pill pill-warn">情绪不足 / 偏中性</span>
-                        <span class="pill pill-good">Ours</span>
-                        <span class="pill pill-good">情绪更到位、强度更稳定</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="columns is-variable is-6 mt-2">
-                  <div class="column is-6">
-                    <p class="mb-2"><b>Baseline (index)</b> — <span class="mono">0011_001415-index-情绪.wav</span></p>
-                    <audio controls preload="none" class="audio-wrap">
-                      <source src="static/audio/0011_001415-index-情绪.wav" type="audio/wav" />
-                    </audio>
-                  </div>
-                  <div class="column is-6">
-                    <p class="mb-2"><b>Ours</b> — <span class="mono">0011_001415-index-my.wav</span></p>
-                    <audio controls preload="none" class="audio-wrap">
-                      <source src="static/audio/0011_001415-index-my.wav" type="audio/wav" />
-                    </audio>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 0011_001199 -->
-          <div class="column is-12">
-            <div class="card demo-card">
-              <div class="card-content">
-                <div class="level is-mobile">
-                  <div class="level-left">
-                    <div>
-                      <div class="demo-id">0011_001199</div>
-                      <div class="hint">
-                        <span class="pill pill-b">Baseline</span>
-                        <span class="pill pill-warn">断句/节奏崩</span>
-                        <span class="pill pill-good">Ours</span>
-                        <span class="pill pill-good">语流更连贯、韵律更自然</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="columns is-variable is-6 mt-2">
-                  <div class="column is-6">
-                    <p class="mb-2"><b>Baseline (index)</b> — <span class="mono">0011_001199-index-断句.wav</span></p>
-                    <audio controls preload="none" class="audio-wrap">
-                      <source src="static/audio/0011_001199-index-断句.wav" type="audio/wav" />
-                    </audio>
-                  </div>
-                  <div class="column is-6">
-                    <p class="mb-2"><b>Ours</b> — <span class="mono">0011_001199-index-my.wav</span></p>
-                    <audio controls preload="none" class="audio-wrap">
-                      <source src="static/audio/0011_001199-index-my.wav" type="audio/wav" />
-                    </audio>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 0011_001068 -->
-          <div class="column is-12">
-            <div class="card demo-card">
-              <div class="card-content">
-                <div class="level is-mobile">
-                  <div class="level-left">
-                    <div>
-                      <div class="demo-id">0011_001068</div>
-                      <div class="hint">
-                        <span class="pill pill-b">Baseline</span>
-                        <span class="pill pill-warn">发声不稳/能量突变</span>
-                        <span class="pill pill-good">Ours</span>
-                        <span class="pill pill-good">更平滑、稳定且仍有强表现力</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="columns is-variable is-6 mt-2">
-                  <div class="column is-6">
-                    <p class="mb-2"><b>Baseline (cv)</b> — <span class="mono">0011_001068-cv-发声.wav</span></p>
-                    <audio controls preload="none" class="audio-wrap">
-                      <source src="static/audio/0011_001068-cv-发声.wav" type="audio/wav" />
-                    </audio>
-                  </div>
-                  <div class="column is-6">
-                    <p class="mb-2"><b>Ours</b> — <span class="mono">0011_001068-cv-my.wav</span></p>
-                    <audio controls preload="none" class="audio-wrap">
-                      <source src="static/audio/0011_001068-cv-my.wav" type="audio/wav" />
-                    </audio>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 0011_000691 -->
-          <div class="column is-12">
-            <div class="card demo-card">
-              <div class="card-content">
-                <div class="level is-mobile">
-                  <div class="level-left">
-                    <div>
-                      <div class="demo-id">0011_000691</div>
-                      <div class="hint">
-                        <span class="pill pill-b">Baseline</span>
-                        <span class="pill pill-warn">情感表达不足/强度不够</span>
-                        <span class="pill pill-good">Ours</span>
-                        <span class="pill pill-good">情感更集中、目标更明确</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="columns is-variable is-6 mt-2">
-                  <div class="column is-6">
-                    <p class="mb-2"><b>Baseline (cv)</b> — <span class="mono">0011_000691-cv-情感.wav</span></p>
-                    <audio controls preload="none" class="audio-wrap">
-                      <source src="static/audio/0011_000691-cv-情感.wav" type="audio/wav" />
-                    </audio>
-                  </div>
-                  <div class="column is-6">
-                    <p class="mb-2"><b>Ours</b> — <span class="mono">0011_000691-cv-my.wav</span></p>
-                    <audio controls preload="none" class="audio-wrap">
-                      <source src="static/audio/0011_000691-cv-my.wav" type="audio/wav" />
-                    </audio>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 0011_000629 -->
-          <div class="column is-12">
-            <div class="card demo-card">
-              <div class="card-content">
-                <div class="level is-mobile">
-                  <div class="level-left">
-                    <div>
-                      <div class="demo-id">0011_000629</div>
-                      <div class="hint">
-                        <span class="pill pill-b">Baseline</span>
-                        <span class="pill pill-warn">破音/失真</span>
-                        <span class="pill pill-good">Ours</span>
-                        <span class="pill pill-good">更干净、失真更少</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="columns is-variable is-6 mt-2">
-                  <div class="column is-6">
-                    <p class="mb-2"><b>Baseline (index)</b> — <span class="mono">0011_000629-index-破音.wav</span></p>
-                    <audio controls preload="none" class="audio-wrap">
-                      <source src="static/audio/0011_000629-index-破音.wav" type="audio/wav" />
-                    </audio>
-                  </div>
-                  <div class="column is-6">
-                    <p class="mb-2"><b>Ours</b> — <span class="mono">0011_000629-index-my.wav</span></p>
-                    <audio controls preload="none" class="audio-wrap">
-                      <source src="static/audio/0011_000629-index-my.wav" type="audio/wav" />
-                    </audio>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 0011_000439 -->
-          <div class="column is-12">
-            <div class="card demo-card">
-              <div class="card-content">
-                <div class="level is-mobile">
-                  <div class="level-left">
-                    <div>
-                      <div class="demo-id">0011_000439</div>
-                      <div class="hint">
-                        <span class="pill pill-b">Baseline</span>
-                        <span class="pill pill-warn">情绪不到位/偏中性</span>
-                        <span class="pill pill-good">Ours</span>
-                        <span class="pill pill-good">情绪更饱满且不牺牲清晰度</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="columns is-variable is-6 mt-2">
-                  <div class="column is-6">
-                    <p class="mb-2"><b>Baseline (cv2)</b> — <span class="mono">0011_000439-cv2-情绪.wav</span></p>
-                    <audio controls preload="none" class="audio-wrap">
-                      <source src="static/audio/0011_000439-cv2-情绪.wav" type="audio/wav" />
-                    </audio>
-                  </div>
-                  <div class="column is-6">
-                    <p class="mb-2"><b>Ours</b> — <span class="mono">0011_000439-cv2-my.wav</span></p>
-                    <audio controls preload="none" class="audio-wrap">
-                      <source src="static/audio/0011_000439-cv2-my.wav" type="audio/wav" />
-                    </audio>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 0011_000612 -->
-          <div class="column is-12">
-            <div class="card demo-card">
-              <div class="card-content">
-                <div class="level is-mobile">
-                  <div class="level-left">
-                    <div>
-                      <div class="demo-id">0011_000612</div>
-                      <div class="hint">
-                        <span class="pill pill-b">Baseline</span>
-                        <span class="pill pill-warn">情绪/强度不稳定</span>
-                        <span class="pill pill-good">Ours</span>
-                        <span class="pill pill-good">强度更可控、听感更稳</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="columns is-variable is-6 mt-2">
-                  <div class="column is-6">
-                    <p class="mb-2"><b>Baseline (cv2)</b> — <span class="mono">0011_000612-cv2-情绪.wav</span></p>
-                    <audio controls preload="none" class="audio-wrap">
-                      <source src="static/audio/0011_000612-cv2-情绪.wav" type="audio/wav" />
-                    </audio>
-                  </div>
-                  <div class="column is-6">
-                    <p class="mb-2"><b>Ours</b> — <span class="mono">0011_000612-cv-my.wav</span></p>
-                    <audio controls preload="none" class="audio-wrap">
-                      <source src="static/audio/0011_000612-cv-my.wav" type="audio/wav" />
-                    </audio>
-                  </div>
-                </div>
-
-                <p class="hint tight">
-                  Note: this pair mixes <span class="mono">cv2</span> vs <span class="mono">cv</span> in filenames as provided. If that’s a typo, just rename the file or update the path here.
-                </p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="content mt-5">
-          <p class="hint">
-            Tip: if your server doesn’t auto-serve <span class="mono">.wav</span> with the correct MIME type, set it to <span class="mono">audio/wav</span>.
-          </p>
-        </div>
+        <div id="demo-grid" class="columns is-multiline"></div>
       </section>
 
     </div>
   </main>
+
+  <script>
+    const demos = [
+      {
+        id: "0011_000439",
+        emotion: "Angry",
+        prompt: "Let go of my top knot.",
+        backbone: "CosyVoice2",
+        baselineSrc: "static/audio/0011_000439_cosyvoice2_baseline.wav",
+        oursSrc: "static/audio/0011_000439_cosyvoice2_ours.wav",
+        note: "Our method better preserves high-arousal anger while keeping articulation clean."
+      },
+      {
+        id: "0011_000612",
+        emotion: "Angry",
+        prompt: "I believe you are one of them!",
+        backbone: "CosyVoice2",
+        baselineSrc: "static/audio/0011_000612_cosyvoice2_baseline.wav",
+        oursSrc: "static/audio/0011_000612_cosyvoice2_ours.wav",
+        note: "Less neutral drift and more controlled intensity at high arousal."
+      },
+      {
+        id: "0011_000629",
+        emotion: "Angry",
+        prompt: "These words behind the ears is nonsense.",
+        backbone: "IndexTTS2",
+        baselineSrc: "static/audio/0011_000629_indextts2_baseline.wav",
+        oursSrc: "static/audio/0011_000629_indextts2_ours.wav",
+        note: "Fewer audible artifacts under aggressive delivery."
+      },
+      {
+        id: "0011_000691",
+        emotion: "Angry",
+        prompt: "Enough,you a foolish chatter.",
+        backbone: "CosyVoice2",
+        baselineSrc: "static/audio/0011_000691_cosyvoice2_baseline.wav",
+        oursSrc: "static/audio/0011_000691_cosyvoice2_ours.wav",
+        note: "Stronger affect with improved stability and fewer distortions."
+      },
+      {
+        id: "0011_001068",
+        emotion: "Sad",
+        prompt: "Then sadly it is much farther.",
+        backbone: "CosyVoice2",
+        baselineSrc: "static/audio/0011_001068_cosyvoice2_baseline.wav",
+        oursSrc: "static/audio/0011_001068_cosyvoice2_ours.wav",
+        note: "More stable phonation and smoother dynamics in expressive regions."
+      },
+      {
+        id: "0011_001199",
+        emotion: "Sad",
+        prompt: "My winding sheet!",
+        backbone: "IndexTTS2",
+        baselineSrc: "static/audio/0011_001199_indextts2_baseline.wav",
+        oursSrc: "static/audio/0011_001199_indextts2_ours.wav",
+        note: "Fewer broken-phrasing failures and more coherent prosody."
+      },
+      {
+        id: "0011_001415",
+        emotion: "Surprise",
+        prompt: "Poor Tom is now dead!",
+        backbone: "IndexTTS2",
+        baselineSrc: "static/audio/0011_001415_indextts2_baseline.wav",
+        oursSrc: "static/audio/0011_001415_indextts2_ours.wav",
+        note: "Clearer surprised intent with reduced neutral fallback."
+      }
+    ];
+
+    function pill(text, cls) {
+      return `<span class="pill ${cls || ""}">${text}</span>`;
+    }
+
+    function render(filter) {
+      const grid = document.getElementById("demo-grid");
+      const items = demos.filter(d => filter === "all" ? true : d.emotion === filter);
+
+      grid.innerHTML = items.map(d => `
+        <div class="column is-12">
+          <div class="card demo-card">
+            <div class="card-content">
+              <div class="level is-mobile mb-2">
+                <div class="level-left">
+                  <div>
+                    <div class="demo-id">${d.id}</div>
+                    <div class="mt-1">
+                      ${pill(d.emotion, "pill-emo")}
+                      ${pill("Baseline: " + d.backbone, "pill-base")}
+                      ${pill("Ours (ERNP + LIG)", "pill-ours")}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="prompt"><b>Prompt:</b> ${d.prompt}</div>
+              <div class="note">${d.note}</div>
+
+              <div class="columns is-variable is-6 mt-3">
+                <div class="column is-6">
+                  <p class="mb-2"><b>Baseline</b> (${d.backbone})</p>
+                  <audio controls preload="none" aria-label="Baseline audio">
+                    <source src="${d.baselineSrc}" type="audio/wav" />
+                  </audio>
+                </div>
+                <div class="column is-6">
+                  <p class="mb-2"><b>Ours</b> (same backbone)</p>
+                  <audio controls preload="none" aria-label="Ours audio">
+                    <source src="${d.oursSrc}" type="audio/wav" />
+                  </audio>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function setActiveTab(filter) {
+      document.querySelectorAll(".tabs li").forEach(li => li.classList.remove("is-active"));
+      const a = document.querySelector(`.tabs a[data-filter="${filter}"]`);
+      if (a && a.parentElement) a.parentElement.classList.add("is-active");
+    }
+
+    document.querySelectorAll(".tabs a").forEach(a => {
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        const filter = a.getAttribute("data-filter") || "all";
+        setActiveTab(filter);
+        render(filter);
+      });
+    });
+
+    render("all");
+  </script>
 </body>
 </html>
